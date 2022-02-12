@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>booking</title>
+</head>
+<body>
+    <h1>Booking</h1>
+    <form action="/booking" id="booking-form" method="post">
+        <input type="text" name="source" placeholder="Source" id="source-input">
+        <input type="text" name="destination" placeholder="Destination" id="destination-input">
+        <button type="submit">Search</button>
+    </form>
+    <table border="1" id="rides-table"></table>
+    <script>
+        const destination = document.getElementById('destination-input');
+        const form = document.getElementById('booking-form');
+        const source = document.getElementById('source-input');
+        const table = document.getElementById('rides-table');
+        table.style.display = 'none';
+        
+        form.onsubmit = async event => {
+            event.preventDefault();
+            const { rides } = await fetch('http://localhost:3001/booking', {
+                body: JSON.stringify({
+                    destination: destination.value,
+                    source: source.value
+                }),
+                headers: { 'Content-Type': 'application/json' },
+                method: 'POST'
+            }).then(response => response.json());
+
+            if (rides.length) {
+                table.innerHTML = `
+                    <tr>
+                        <th>Name</th>
+                        <th>Source</th>
+                        <th>Destination</th>
+                        <th>Date</th>
+                        <th>Time</th>
+                        <th>Fare</th>
+                        <th>Availability</th>
+                        <th>Phone</th>
+                        <th>Email</th>
+                        <th></th>
+                    </tr>
+                `;
+                table.style.display = 'table';
+                
+                rides.forEach(ride => {
+                    const tr = `
+                        <tr>
+                            <td>${ride.name}</td>
+                            <td>${ride.source}</td>
+                            <td>${ride.destination}</td>
+                            <td>${ride.date}</td>
+                            <td>${ride.time}</td>
+                            <td>${ride.fare}</td>
+                            <td>${ride.availability}</td>
+                            <td>${ride.phone}</td>
+                            <td>${ride.mailid}</td>
+                            <td>
+                                <button id="${ride._id}">Request</button>
+                            </td>
+                        </tr>
+                    `;
+                    table.innerHTML += tr;
+
+                    console.log(document.getElementById(ride._id));
+
+                    document.getElementById(ride._id).onclick = async () => {
+                        const { booking } = await fetch('http://localhost:3001/book', {
+                            body: JSON.stringify({ rideID: ride._id }),
+                            headers: { 'Content-Type': 'application/json' },
+                            method: 'POST'
+                        }).then(response => response.json());
+                        console.log(booking);
+                        alert('You have booked the ride!');
+                        location.href = '/rider';
+                    };
+                });
+            } else {
+                table.style.display = 'none';
+            }
+        };
+    </script>
+</body>
+</html>

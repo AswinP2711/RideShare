@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Publish Details</title>
+</head>
+<body>
+    <h1>Publish Details</h1>
+    <table border="1">
+        <tr>
+            <th>Name</th>
+            <th>Mail ID</th>
+            <th>Phone</th>
+            <th>Source</th>
+            <th>Destination</th>
+            <th>Date</th>
+            <th>Time</th>            
+            <th>Availability</th>            
+            <th>Fare</th>            
+
+        </tr>
+    <% result.forEach(i => { %>
+        <tr>
+            <td><%= i.name %></td>
+            <td><%= i.mailid %></td>
+            <td><%= i.phone %></td>
+            <td><%= i.source %></td>
+            <td><%= i.destination %></td>
+            <td><%= i.date %></td>
+            <td><%= i.time %></td>
+            <td><%= i.availability %></td>
+            <td><%= i.fare %></td>
+        </tr>
+        <% }); %>
+    </table>
+</body>
+</html>
