@@ -77,6 +77,14 @@ const requestSchema = {
   }
 }
 
+const complaintSchema = {
+  CompalinteeMailID: String,
+  RiderMailId: String,
+  Description: String,
+};
+
+const complaintRider = mongoose.model("complaintRider", complaintSchema);
+
 const Request = mongoose.model('Request', requestSchema);
 
 function auth(req, res, next) {
@@ -275,4 +283,34 @@ app.post('/book', async function (request, response) {
     ride: request.body.rideID
   }).save();
   response.status(201).json({ booking });
-})
+});
+
+app.get("/complaint",function (req,res) {
+  res.render("complaint")
+});
+
+app.post("/complaint", function (req, res) {
+  var Ridermail = req.body.ridermail;
+  var description = req.body.desc;
+
+  var userName = req.session.userEmail;
+
+  const complaintRider1 = new complaintRider({
+    CompalinteeMailID: userName,
+    RiderMailId: Ridermail,
+    Description: description,
+  });
+
+  complaintRider1.save();
+});
+
+app.get("/complaintAction",function (req,res) {
+  complaintRider.find({}, function (err, results) {
+    if (err) {
+      console.log(err);
+    } else {
+      console.log(results);
+      res.render("complaintAction", { result: results });
+    }
+  });
+});
