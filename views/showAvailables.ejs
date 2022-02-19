@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <h1>Availability</h1>
+    <table border="1">
+        <tr>
+            <th>Name</th>
+            <th>Mail Id</th>
+            <th>Phone</th>
+            <th>Source</th>
+            <th>Destination</th>
+            <th>Date</th>
+            <th>Time</th>
+            <th>Fare</th>
+            <th>Availability</th>
+            <th>Select number of Seats</th>
+            <th>Request</th>
+        </tr>
+        <% result.forEach(i => { %>
+            <tr>
+                <td><%= i.name %></td>
+                <td><%= i.mailid %></td>
+                <td><%= i.phone %></td>
+                <td><%= i.source %></td>
+                <td><%= i.destination %></td>
+                <td><%= i.date %></td>
+                <td><%= i.time %></td>
+                <td><%= i.fare %></td>
+                <td><%= i.availability %></td>
+                <td>
+                    <form action="/showAvailables" method="post">
+                        <input type="text" name="SelectedSeats">
+                </td>
+                <td>
+                        <input type="hidden" name="riname" value="<%= i.name %>">
+                        <input type="hidden" name="rimail" value="<%= i.mailid %>">
+                        <input type="hidden" name="risour" value="<%= i.source %>">
+                        <input type="hidden" name="ridest" value="<%= i.destination %>">
+                        <input type="hidden" name="ridate" value="<%= i.date %>">
+                        <input type="hidden" name="ritime" value="<%= i.time %>">
+                        <input type="hidden" name="rifare" value="<%= i.fare %>">
+                        <input type="hidden" name="riavail" value="<%= i.availability %>">
+                        <button type="submit">Request</button>
+                    </form>
+                </td>
+            </tr>
+        <% }); %>
+      </table>
+</body>
+</html>

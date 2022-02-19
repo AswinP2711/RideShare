@@ -63,19 +63,25 @@ const publishSchema = {
   date: String,
   time: String,
   availability: Number,
-  fare: Number,
+  fare: Number
 };
 
 const publishDetails = mongoose.model("publishDetails", publishSchema);
 
 const requestSchema = {
-  isAccepted: Boolean,
-  requesterEmail: String,
-  ride: {
-    ref: 'publishDetails',
-    type: mongoose.Schema.Types.ObjectId
-  }
-}
+  name: String,
+  RequesterMailid: String,
+  PublisherMailid:String,
+  source: String,
+  destination: String,
+  date: String,
+  time: String,
+  fare: Number,
+  availability: Number,
+  Selectedseats:Number
+};
+
+const Request = mongoose.model("Request", requestSchema);
 
 const complaintSchema = {
   CompalinteeMailID: String,
@@ -85,7 +91,22 @@ const complaintSchema = {
 
 const complaintRider = mongoose.model("complaintRider", complaintSchema);
 
-const Request = mongoose.model('Request', requestSchema);
+const ReomovedSchema = {
+  name: String,
+  mailid: String,
+  phone: String,
+};
+
+const Removed = mongoose.model("Removed", ReomovedSchema);
+
+const SuspendedSchema = {
+  name: String,
+  mailid: String,
+  phone: String,
+  Password: String,
+};
+
+const Suspended = mongoose.model("Suspended", SuspendedSchema);
 
 function auth(req, res, next) {
   if (req.session.userEmail) {
@@ -160,31 +181,50 @@ app.post("/signup", function (req, res) {
   var Documenttype = req.body.doctype;
   var Documentnumber = req.body.docno;
   var Password = req.body.pass1;
+  var cPassword = req.body.pass2;
 
-  const signupDetails1 = new signupDetails({
-    name: Name,
-    dob: DOB,
-    gender: Gender,
-    email: Email,
-    phone: Phone,
-    documenttype: Documenttype,
-    documentnumber: Documentnumber,
-    password: Password,
+  signupDetails.findOne({ email: Email }, function (err, foundUser) {
+    if (!foundUser) {
+      if (Password != cPassword) {
+        console.log("Password does not match");
+        res.render("PassNotMatch.ejs");
+      } else {
+        const signupDetails1 = new signupDetails({
+          name: Name,
+          dob: DOB,
+          gender: Gender,
+          email: Email,
+          phone: Phone,
+          documenttype: Documenttype,
+          documentnumber: Documentnumber,
+          password: Password,
+        });
+
+        signupDetails1.save(function (err, result) {
+          if (err) {
+            console.log(err);
+          } else {
+            res.redirect("/");
+          }
+        });
+
+        const loginDetails1 = new loginDetails({
+          username: Email,
+          password: Password,
+        });
+
+        loginDetails1.save();
+      }
+    } else {
+      console.log("Email Id already Exists!!!");
+      res.render("EmailIdAlreadyExists");
+    }
   });
-
-  signupDetails1.save();
-
-  const loginDetails1 = new loginDetails({
-    username: Email,
-    password: Password,
-  });
-
-  loginDetails1.save();
 });
 
 app.post("/logout", auth, function (req, res) {
   req.session.destroy();
-  res.redirect("/login");
+  res.redirect("/");
 });
 
 app.get("/rider", auth, function (req, res) {
@@ -262,31 +302,78 @@ app.listen(3001, function () {
   console.log("Server started on port 3001");
 });
 
-app.get("/booking",function (req,res) {
-  res.render("booking")
-})
-
-app.post('/booking', async function (request, response) {
-  const { destination, source } = request.body;
-  const query = {};
-  if (destination) query.destination = destination;
-  if (source) query.source = source;
-  query.mailid = { $ne: request.session.userEmail };
-  const rides = await publishDetails.find(query);
-  response.json({ rides });
+app.get("/booking", function (req, res) {
+  publishDetails.find({}, function (err, results) {
+    if (err) {
+      console.log(err);
+    } else {
+      res.render("booking", { result: results });
+    }
+  });
 });
 
-app.post('/book', async function (request, response) {
-  const booking = await new Request({
-    isAccepted: false,
-    requesterEmail: request.session.userEmail,
-    ride: request.body.rideID
-  }).save();
-  response.status(201).json({ booking });
+app.post("/booking", function (req, res) {
+  publishDetails.find({source: req.body.source, destination: req.body.destination}, function (err, results) {
+    if (err) {
+      console.log(err);
+    } else {
+      res.render("showAvailables", { result: results });
+    }
+  });
 });
 
-app.get("/complaint",function (req,res) {
-  res.render("complaint")
+app.post("/showAvailables",function (req,res) {
+  var userName = req.session.userEmail;
+
+  const Request1 = new Request({
+    name: req.body.riname,
+    RequesterMailid: userName,
+    PublisherMailid:req.body.rimail,
+    source: req.body.risour,
+    destination: req.body.ridest,
+    date: req.body.ridate,
+    time: req.body.ritime,
+    fare: req.body.rifare,
+    availability: req.body.riavail,
+    Selectedseats: req.body.SelectedSeats,
+  });
+
+  Request1.save(function (err, result) {
+    if (err) {
+      console.log(err);
+    } else {
+      res.render("RequestSuccess");
+    }
+  });
+});
+
+// app.post("/booking", async function (request, response) {
+//   const { destination, source } = request.body;
+//   const query = {};
+//   if (destination) query.destination = destination;
+//   if (source) query.source = source;
+//   query.mailid = { $ne: request.session.userEmail };
+//   const rides = await publishDetails.find(query);
+//   response.json({ rides });
+// });
+
+// app.post("/book", async function (request, response) {
+//   const booking = await new Request({
+//     isAccepted: false,
+//     requesterEmail: request.session.userEmail,
+//     ride: request.body.rideID,
+//   }).save();
+//   response.status(201).json({ booking });
+// });
+
+app.get("/complaint", function (req, res) {
+  signupDetails.find({}, function (err, results) {
+    if (err) {
+      console.log(err);
+    } else {
+      res.render("complaint", { result: results });
+    }
+  });
 });
 
 app.post("/complaint", function (req, res) {
@@ -302,15 +389,158 @@ app.post("/complaint", function (req, res) {
   });
 
   complaintRider1.save();
+  res.render("Complainted");
 });
 
-app.get("/complaintAction",function (req,res) {
+app.get("/complaintAction", function (req, res) {
   complaintRider.find({}, function (err, results) {
     if (err) {
       console.log(err);
     } else {
-      console.log(results);
       res.render("complaintAction", { result: results });
+    }
+  });
+});
+
+app.post("/complaintAction", function (req, res) {
+  var riderMail = req.body.ridermail;
+  signupDetails.findOne({ email: riderMail }, function (err, foundUser) {
+    if (err) {
+      console.log(err);
+    } else {
+      var Name = foundUser.name;
+      var Phone = foundUser.phone;
+      var DocumentType = foundUser.documenttype;
+      var DocumentNumber = foundUser.documentnumber;
+    }
+    res.render("ComplaintDetails", {
+      name: Name,
+      phone: Phone,
+      email: riderMail,
+      documenttype: DocumentType,
+      documentnumber: DocumentNumber,
+    });
+  });
+});
+
+app.post("/suspend", function (req, res) {
+  loginDetails.findOne({ email: req.body.rmail }, function (err, foundUser) {
+    if (err) {
+      console.log(err);
+    } else {
+      var password = foundUser.password;
+      signupDetails.findOne(
+        { email: req.body.rmail },
+        function (err, foundUser) {
+          if (err) {
+            console.log(err);
+          } else {
+            var Name = foundUser.name;
+            var Phone = foundUser.phone;
+            const Suspended1 = new Suspended({
+              name: Name,
+              mailid: req.body.rmail,
+              phone: Phone,
+              Password: password,
+            });
+            Suspended1.save();
+            loginDetails.findOneAndRemove(
+              { username: req.body.rmail },
+              function (err) {
+                if (err) {
+                  console.log(err);
+                } else {
+                  complaintRider.findOneAndRemove(
+                    { RiderMailId: req.body.rmail },
+                    function (err) {
+                      if (err) {
+                        console.log(err);
+                      } else {
+                        res.render("suspend");
+                      }
+                    }
+                  );
+                }
+              }
+            );
+          }
+        }
+      );
+    }
+  });
+});
+
+app.post("/remove", function (req, res) {
+  signupDetails.findOne({ email: req.body.rmail }, function (err, foundUser) {
+    if (err) {
+      console.log(err);
+    } else {
+      var Name = foundUser.name;
+      var Phone = foundUser.phone;
+    }
+    const Removed1 = new Removed({
+      name: Name,
+      mailid: req.body.rmail,
+      phone: Phone,
+    });
+    Removed1.save();
+    loginDetails.findOneAndRemove({ username: req.body.rmail }, function (err) {
+      if (err) {
+        console.log(err);
+      } else {
+        signupDetails.findOneAndRemove(
+          { email: req.body.rmail },
+          function (err) {
+            if (err) {
+              console.log(err);
+            } else {
+              complaintRider.findOneAndRemove(
+                { RiderMailId: req.body.rmail },
+                function (err) {
+                  if (err) {
+                    console.log(err);
+                  } else {
+                    res.render("remove");
+                  }
+                }
+              );
+            }
+          }
+        );
+      }
+    });
+  });
+});
+
+app.get("/SuspendedRiders", function (req, res) {
+  Suspended.find({}, function (err, results) {
+    if (err) {
+      console.log(err);
+    } else {
+      res.render("SuspendedRiders", { result: results });
+    }
+  });
+});
+
+app.post("/Unsuspend", function (req, res) {
+  var rmail = req.body.ridermail;
+  console.log(rmail);
+  Suspended.findOne({ mailid: rmail }, function (err, foundUser) {
+    if (err) {
+      console.log(err);
+    } else {
+      const loginDetails2 = new loginDetails({
+        username: rmail,
+        password: foundUser.Password,
+      });
+      loginDetails2.save();
+      Suspended.findOneAndRemove({ mailid: rmail }, function (err) {
+        if (err) {
+          console.log(err);
+        } else {
+          res.render("Unsuspend");
+        }
+      });
     }
   });
 });

@@ -4,6 +4,33 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <h1>Booking</h1>
+    <form action="/booking" method="post">
+        <select name="source">
+            <option value="">Select</option>
+            <% result.forEach(i => { %>
+                <option value="<%= i.source %>"><%= i.source %></option>
+            <% }); %>
+        </select>
+        <select name="destination">
+            <option value="">Select</option>
+            <% result.forEach(i => { %>
+                <option value="<%= i.destination %>"><%= i.destination %></option>
+            <% }); %>
+        </select>
+        <button type="submit">Search</button>
+    </form>
+</body>
+</html>
+<!-- <!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>booking</title>
 </head>
 <body>
@@ -87,4 +114,4 @@
         };
     </script>
 </body>
-</html>
+</html> -->

@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<title>Table V02</title>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+<!--===============================================================================================-->	
+	<link rel="icon" type="image/png" href="images/icons/favicon.ico"/>
+<!--===============================================================================================-->
+	<link rel="stylesheet" type="text/css" href="vendor/bootstrap/css/bootstrap.min.css">
+<!--===============================================================================================-->
+	<link rel="stylesheet" type="text/css" href="fonts/font-awesome-4.7.0/css/font-awesome.min.css">
+<!--===============================================================================================-->
+	<link rel="stylesheet" type="text/css" href="vendor/animate/animate.css">
+<!--===============================================================================================-->
+	<link rel="stylesheet" type="text/css" href="vendor/select2/select2.min.css">
+<!--===============================================================================================-->
+	<link rel="stylesheet" type="text/css" href="vendor/perfect-scrollbar/perfect-scrollbar.css">
+<!--===============================================================================================-->
+	<link rel="stylesheet" type="text/css" href="css/util.css">
+	<link rel="stylesheet" type="text/css" href="css/main.css">
+<!--===============================================================================================-->
+</head>
+<body>
+	
+	<div class="limiter">
+		<div class="container-table100">
+			<div class="wrap-table100">
+					<div class="table">
+						<div class="row header">
+							<div class="cell">
+								Name
+							</div>
+							<div class="cell" style="padding-left: 25px;">
+								Email
+							</div>
+                            <div class="cell" style="padding-left: 25px;">
+								Phone
+							</div>
+                            <div class="cell" style="padding-left: 25px;">
+								Take Action
+							</div>
+						</div>
+
+                        <% result.forEach(i => { %>
+                            <div class="row">
+                                <div class="cell" data-title="Full Name" style="padding-left: 25px;">
+                                    <%= i.name %>
+                                </div>
+                                <div class="cell" data-title="Job Title" style="padding-left: 25px;">
+                                    <%= i.mailid %>
+                                </div>
+                                <div class="cell" data-title="Location" style="padding-left: 25px;">
+                                    <%= i.phone %>
+                                </div>
+                                <div class="cell" data-title="Location" style="padding-left: 25px;">
+                                    <form action="/Unsuspend" method="post">
+                                        <input type="hidden" name="ridermail" value="<%= i.mailid %>">
+                                        <button type="submit">Un Suspend</button>
+                                    </form>
+                                </div>
+                            </div>
+                            <% }); %>
+
+					</div>
+			</div>
+		</div>
+	</div>
+
+
+	
+
+<!--===============================================================================================-->	
+	<script src="vendor/jquery/jquery-3.2.1.min.js"></script>
+<!--===============================================================================================-->
+	<script src="vendor/bootstrap/js/popper.js"></script>
+	<script src="vendor/bootstrap/js/bootstrap.min.js"></script>
+<!--===============================================================================================-->
+	<script src="vendor/select2/select2.min.js"></script>
+<!--===============================================================================================-->
+	<script src="js/main.js"></script>
+
+</body>
+</html>

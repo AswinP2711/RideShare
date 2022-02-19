@@ -8,7 +8,12 @@
 </head>
 <body>
     <form method="post">
-        <input type="text" name="ridermail" placeholder="Rider Mail ID">
+        <select name="ridermail">
+            <option value="">Select</option>
+            <% result.forEach(i => { %>
+            <option value="<%= i.email %>"><%= i.email %></option>
+            <% }); %>
+        </select>
         <input type="text" name="desc" placeholder="Description">
         <button type="submit">Submit</button>
     </form>

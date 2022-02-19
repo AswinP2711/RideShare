@@ -1,27 +1,82 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Complaints</title>
-</head>
-<body>
+  </head>
+  <body>
     <h1>Complaint Details</h1>
     <table border="1">
-        <tr>
-            <th>Complaintee Email</th>
-            <th>Rider Email</th>
-            <th>Description</th>         
-
-        </tr>
-    <% result.forEach(i => { %>
-        <tr>
-            <td><%= i.CompalinteeMailID %></td>
-            <td><%= i.RiderMailId %></td>
-            <td><%= i.Description %></td>
-        </tr>
-        <% }); %>
+      <tr>
+        <th>Complaintee Email</th>
+        <th>Rider Email</th>
+        <th>Description</th>
+        <th>Action</th>
+      </tr>
+      <% result.forEach(i => { %>
+      <tr>
+        <td><%= i.CompalinteeMailID %></td>
+        <td><%= i.RiderMailId %></td>
+        <td><%= i.Description %></td>
+        <td>
+          <form method="post">
+            <input type="hidden" name="ridermail" value="<%= i.RiderMailId %>">
+            <button type="submit">View Details</button>
+          </form>
+        </td>
+      <% }); %>
     </table>
-</body>
+  </body>
 </html>
+
+<!-- <!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Complaints</title>
+  </head>
+  <body>
+    <h1>Complaint Details</h1>
+    <table border="1">
+      <tr>
+        <th>Complaintee Email</th>
+        <th>Rider Email</th>
+        <th>Description</th>
+        <th>Suspend</th>
+        <th>Remove</th>
+      </tr>
+      <% result.forEach(i => { %>
+      <tr>
+        <td><%= i.CompalinteeMailID %></td>
+        <td><%= i.RiderMailId %></td>
+        <td><%= i.Description %></td>
+        <td>
+          <button id="bt1" onclick="suspend(this)" value="<%= i.RiderMailId %>">
+            Suspend
+          </button>
+        </td>
+        <td>
+          <button id="bt2" onclick="remove(this)" value="<%= i.RiderMailId %>">
+            Remove
+          </button>
+        </td>
+      </tr>
+      <% }); %>
+    </table>
+    <script>
+      function suspend(objButton) {
+        var sus=objButton.value;
+      }
+
+      function remove(objButton) {
+        var rem=objButton.value;
+      }
+    </script>
+    <form action="/suspension" method="post">
+    </form>
+  </body>
+</html> -->
