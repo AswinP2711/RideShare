@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Removed Riders</title>
+</head>
+<body>
+    <h1>Removed Riders</h1>
+    <table border="1">
+        <tr>
+          <th>Name</th>
+          <th>Mail ID</th>
+          <th>Phone</th>
+        </tr>
+        <% result.forEach(i => { %>
+        <tr>
+          <td><%= i.name %></td>
+          <td><%= i.mailid %></td>
+          <td><%= i.phone %></td>
+        <% }); %>
+      </table>
+</body>
+</html>

@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <h1>My Rides</h1>
+    <table border="1">
+        <tr>
+            <th>Name</th>
+            <th>Mail Id</th>
+            <th>Phone</th>
+            <th>Source</th>
+            <th>Destination</th>
+            <th>date</th>
+            <th>time</th>
+            <th>availability</th>
+            <th>fare</th>
+            <th>Delete Ride</th>
+          </tr>
+          <% result.forEach(i=> { %>
+            <tr>
+              <td>
+                <%= i.name %>
+              </td>
+              <td>
+                <%= i.mailid %>
+              </td>
+              <td>
+                <%= i.phone %>
+              </td>
+              <td>
+                <%= i.source %>
+              </td>
+              <td>
+                <%= i.destination %>
+              </td>
+              <td>
+                <%= i.date %>
+              </td>
+              <td>
+                <%= i.time %>
+              </td>
+              <td>
+                <%= i.availability %>
+              </td>
+              <td>
+                <%= i.fare %>
+              </td>
+              <td>
+                <form method="post">
+                    <input type="hidden" name="name" value="<%= i.name %>">
+                    <input type="hidden" name="Mailid" value="<%= i.mailid %>">
+                    <input type="hidden" name="Phone" value="<%= i.phone %>">
+                    <input type="hidden" name="Source" value="<%= i.source %>">
+                    <input type="hidden" name="Destination" value="<%= i.destination %>">
+                    <input type="hidden" name="datE" value="<%= i.date %>">
+                    <input type="hidden" name="timE" value="<%= i.time %>">
+                    <input type="hidden" name="available" value="<%= i.availability %>">
+                    <input type="hidden" name="fare" value="<%= i.fare %>">         
+                    <button type="submit">Delete Ride</button>
+                  </form>
+              </td>
+              <% }); %>
+      </table>
+</body>
+</html>

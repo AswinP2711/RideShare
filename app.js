@@ -63,7 +63,7 @@ const publishSchema = {
   date: String,
   time: String,
   availability: Number,
-  fare: Number
+  fare: Number,
 };
 
 const publishDetails = mongoose.model("publishDetails", publishSchema);
@@ -71,14 +71,15 @@ const publishDetails = mongoose.model("publishDetails", publishSchema);
 const requestSchema = {
   name: String,
   RequesterMailid: String,
-  PublisherMailid:String,
+  PublisherMailid: String,
   source: String,
   destination: String,
   date: String,
   time: String,
   fare: Number,
   availability: Number,
-  Selectedseats:Number
+  Selectedseats: Number,
+  Status: String,
 };
 
 const Request = mongoose.model("Request", requestSchema);
@@ -136,34 +137,49 @@ app.post("/login", function (req, res) {
   var userName = req.body.userID;
   var password = req.body.pass;
 
-  loginDetails.findOne({ username: userName }, function (err, foundUser) {
-    if (err) {
-      console.log(err);
+  Removed.findOne({ mailid: userName }, function (err, foundUser) {
+    if (foundUser) {
+      res.render("UserRemoved");
     } else {
-      if (foundUser) {
-        if (foundUser.password === password) {
-          if (userName == "Admin") {
-            res.redirect("/admin");
-          } else {
-            signupDetails.findOne(
-              { email: userName },
-              function (err, foundUser) {
-                if (err) {
-                  console.log(err);
-                } else {
-                  if (foundUser) {
-                    req.session.userEmail = foundUser.email;
-                    req.session.userName = foundUser.name;
-                    res.redirect("/rider");
+      Suspended.findOne({ mailid: userName }, function (err, foundUser) {
+        if (foundUser) {
+          res.render("UserSuspended");
+        } else {
+          loginDetails.findOne(
+            { username: userName },
+            function (err, foundUser) {
+              if (err) {
+                console.log(err);
+              } else {
+                if (foundUser) {
+                  if (foundUser.password === password && foundUser.username) {
+                    if (userName == "Admin") {
+                      res.redirect("/admin");
+                    } else {
+                      signupDetails.findOne(
+                        { email: userName },
+                        function (err, foundUser) {
+                          if (err) {
+                            console.log(err);
+                          } else {
+                            if (foundUser) {
+                              req.session.userEmail = foundUser.email;
+                              req.session.userName = foundUser.name;
+                              res.redirect("/rider");
+                            }
+                          }
+                        }
+                      );
+                    }
+                  } else if (foundUser.password != password) {
+                    res.render("uorpassIncorrect");
                   }
                 }
               }
-            );
-          }
-        } else if (foundUser.password != password) {
-          console.log("Not valid");
+            }
+          );
         }
-      }
+      });
     }
   });
 });
@@ -313,22 +329,25 @@ app.get("/booking", function (req, res) {
 });
 
 app.post("/booking", function (req, res) {
-  publishDetails.find({source: req.body.source, destination: req.body.destination}, function (err, results) {
-    if (err) {
-      console.log(err);
-    } else {
-      res.render("showAvailables", { result: results });
+  publishDetails.find(
+    { source: req.body.source, destination: req.body.destination },
+    function (err, results) {
+      if (err) {
+        console.log(err);
+      } else {
+        res.render("showAvailables", { result: results });
+      }
     }
-  });
+  );
 });
 
-app.post("/showAvailables",function (req,res) {
+app.post("/showAvailables", function (req, res) {
   var userName = req.session.userEmail;
 
   const Request1 = new Request({
     name: req.body.riname,
     RequesterMailid: userName,
-    PublisherMailid:req.body.rimail,
+    PublisherMailid: req.body.rimail,
     source: req.body.risour,
     destination: req.body.ridest,
     date: req.body.ridate,
@@ -336,6 +355,7 @@ app.post("/showAvailables",function (req,res) {
     fare: req.body.rifare,
     availability: req.body.riavail,
     Selectedseats: req.body.SelectedSeats,
+    Status: "Requested",
   });
 
   Request1.save(function (err, result) {
@@ -347,24 +367,202 @@ app.post("/showAvailables",function (req,res) {
   });
 });
 
-// app.post("/booking", async function (request, response) {
-//   const { destination, source } = request.body;
-//   const query = {};
-//   if (destination) query.destination = destination;
-//   if (source) query.source = source;
-//   query.mailid = { $ne: request.session.userEmail };
-//   const rides = await publishDetails.find(query);
-//   response.json({ rides });
-// });
+app.get("/requests", function (req, res) {
+  var userName = req.session.userEmail;
+  Request.find(
+    { RequesterMailid: userName, Status: "Requested" },
+    function (err, results) {
+      if (err) {
+        console.log(err);
+      } else {
+        res.render("requests", { result: results });
+      }
+    }
+  );
+});
 
-// app.post("/book", async function (request, response) {
-//   const booking = await new Request({
-//     isAccepted: false,
-//     requesterEmail: request.session.userEmail,
-//     ride: request.body.rideID,
-//   }).save();
-//   response.status(201).json({ booking });
-// });
+app.get("/requestsforMe", function (req, res) {
+  var userName = req.session.userEmail;
+  Request.find(
+    { PublisherMailid: userName, Status: "Requested" },
+    function (err, results) {
+      if (err) {
+        console.log(err);
+      } else {
+        res.render("requestsforMe", { result: results });
+      }
+    }
+  );
+});
+
+app.post("/requestsforMe", function (req, res) {
+  Request.findOneAndUpdate(
+    {
+      RequesterMailid: req.body.requestermailid,
+      PublisherMailid: req.body.publishermailid,
+      source: req.body.Source,
+      destination: req.body.Destination,
+      date: req.body.datE,
+      time: req.body.timE,
+    },
+    { $set: { Status: "Accepted" } },
+    function (err, results) {
+      if (err) {
+        console.log(err);
+      } else {
+        publishDetails.findOne(
+          {
+            mailid: req.body.publishermailid,
+            source: req.body.Source,
+            destination: req.body.Destination,
+            date: req.body.datE,
+            time: req.body.timE,
+          },
+          function (err, findUser) {
+            if (err) {
+              console.log(err);
+            } else {
+              let avail =
+                parseInt(findUser.availability) - parseInt(req.body.selected);
+              publishDetails.findOneAndUpdate(
+                {
+                  mailid: req.body.publishermailid,
+                  source: req.body.Source,
+                  destination: req.body.Destination,
+                  date: req.body.datE,
+                  time: req.body.timE,
+                },
+                { $set: { availability: avail } },
+                function (err, results) {
+                  if (err) {
+                    console.log(err);
+                  } else {
+                    res.render("Accepted");
+                  }
+                }
+              );
+            }
+          }
+        );
+      }
+    }
+  );
+});
+
+app.get("/Acceptedmyrequests", function (req, res) {
+  var userName = req.session.userEmail;
+  Request.find(
+    { RequesterMailid: userName, Status: "Accepted" },
+    function (err, results) {
+      if (err) {
+        console.log(err);
+      } else {
+        console.log(results);
+        res.render("Acceptedmyrequests", { result: results });
+      }
+    }
+  );
+});
+
+app.post("/Acceptedmyrequests", function (req, res) {
+  var avail = parseInt(req.body.available) + parseInt(req.body.selected);
+  publishDetails.findOne(
+    {
+      mailid: req.body.publishermailid,
+      source: req.body.Source,
+      destination: req.body.Destination,
+      date: req.body.datE,
+      time: req.body.timE,
+    },
+    function (err, findUser) {
+      if (err) {
+        console.log(err);
+      } else {
+        let avail =
+          parseInt(findUser.availability) + parseInt(req.body.selected);
+        console.log(avail);
+        publishDetails.findOneAndUpdate(
+          {
+            mailid: req.body.publishermailid,
+            source: req.body.Source,
+            destination: req.body.Destination,
+            date: req.body.datE,
+            time: req.body.timE,
+          },
+          { $set: { availability: avail } },
+          function (err, results) {
+            if (err) {
+              console.log(err);
+            } else {
+              Request.findOneAndRemove(
+                {
+                  RequesterMailid: req.body.requestermailid,
+                  PublisherMailid: req.body.publishermailid,
+                  source: req.body.Source,
+                  destination: req.body.Destination,
+                  date: req.body.datE,
+                  time: req.body.timE,
+                },
+                function (err) {
+                  if (err) {
+                    console.log(err);
+                  } else {
+                    res.render("AcceptedCanceled");
+                  }
+                }
+              );
+            }
+          }
+        );
+      }
+    }
+  );
+});
+
+app.get("/myrides", function (req, res) {
+  var userName = req.session.userEmail;
+  publishDetails.find({ mailid: userName }, function (err, results) {
+    if (err) {
+      console.log(err);
+    } else {
+      res.render("myrides", { result: results });
+    }
+  });
+});
+
+app.post("/myrides", function (req, res) {
+  publishDetails.findOneAndRemove(
+    {
+      mailid: req.body.Mailid,
+      source: req.body.Source,
+      destination: req.body.Destination,
+      date: req.body.datE,
+      time: req.body.timE,
+    },
+    function (err) {
+      if (err) {
+        console.log(err);
+      } else {
+        Request.findOneAndRemove(
+          {
+            PublisherMailid: req.body.Mailid,
+            source: req.body.Source,
+            destination: req.body.Destination,
+            date: req.body.datE,
+            time: req.body.timE,
+          },
+          function (err) {
+            if (err) {
+              console.log(err);
+            } else {
+              res.render("DeleteRide");
+            }
+          }
+        );
+      }
+    }
+  );
+});
 
 app.get("/complaint", function (req, res) {
   signupDetails.find({}, function (err, results) {
@@ -509,6 +707,16 @@ app.post("/remove", function (req, res) {
         );
       }
     });
+  });
+});
+
+app.get("/RemovedRiders", function (req, res) {
+  Removed.find({}, function (err, results) {
+    if (err) {
+      console.log(err);
+    } else {
+      res.render("RemovedRiders", { result: results });
+    }
   });
 });
 

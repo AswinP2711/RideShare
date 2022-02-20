@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Complaints</title>
+</head>
+
+<body>
+  <h1>Complaint Details</h1>
+  <table border="1">
+    <tr>
+      <th>Name</th>
+      <th>Requester Mail Id</th>
+      <th>Publisher Mail Id</th>
+      <th>Source</th>
+      <th>Destination</th>
+      <th>date</th>
+      <th>time</th>
+      <th>fare</th>
+      <th>availability</th>
+      <th>Selectedseats</th>
+      <th>Status</th>
+    </tr>
+    <% result.forEach(i=> { %>
+      <tr>
+        <td>
+          <%= i.name %>
+        </td>
+        <td>
+          <%= i.RequesterMailid %>
+        </td>
+        <td>
+          <%= i.PublisherMailid %>
+        </td>
+        <td>
+          <%= i.source %>
+        </td>
+        <td>
+          <%= i.destination %>
+        </td>
+        <td>
+          <%= i.date %>
+        </td>
+        <td>
+          <%= i.time %>
+        </td>
+        <td>
+          <%= i.fare %>
+        </td>
+        <td>
+          <%= i.availability %>
+        </td>
+        <td>
+          <%= i.Selectedseats %>
+        </td>
+        <td>
+          <%= i.Status %>
+        </td>
+        <% }); %>
+  </table>
+</body>
+
+</html>
