@@ -35,19 +35,19 @@
                     <h2 class="title">Registration Info</h2>
                     <form method="POST">
                         <div class="input-group">
-                            <input class="input--style-2" type="text" placeholder="Name" name="Name">
+                            <input class="input--style-2" type="text" placeholder="Name" name="Name" required>
                         </div>
                         <div class="row row-space">
                             <div class="col-2">
                                 <div class="input-group">
-                                    <input class="input--style-2 js-datepicker" type="text" placeholder="Birthdate" name="Dob">
+                                    <input class="input--style-2 js-datepicker" type="text" placeholder="Birthdate" name="Dob" required>
                                     <i class="zmdi zmdi-calendar-note input-icon js-btn-calendar"></i>
                                 </div>
                             </div>
                             <div class="col-2">
                                 <div class="input-group">
                                     <div class="rs-select2 js-select-simple select--no-search">
-                                        <select name="Gender">
+                                        <select name="Gender" required>
                                             <option disabled="disabled" selected="selected">Gender</option>
                                             <option>Male</option>
                                             <option>Female</option>
@@ -61,12 +61,12 @@
                         <div class="row row-space">
                             <div class="col-2">
                                 <div class="input-group">
-                                    <input class="input--style-2" type="email" placeholder="email" name="email">
+                                    <input class="input--style-2" type="email" placeholder="email" name="email" required>
                                 </div>
                             </div>
                             <div class="col-2">
                                 <div class="input-group">
-                                    <input class="input--style-2" type="text" placeholder="Phone" name="phone">
+                                    <input class="input--style-2" type="text" placeholder="Phone" name="phone" required>
                                 </div>
                             </div>
                         </div>
@@ -74,7 +74,7 @@
                             <div class="col-2">
                                 <div class="input-group">
                                     <div class="rs-select2 js-select-simple select--no-search">
-                                <select name="doctype">
+                                <select name="doctype" required>
                                     <option disabled="disabled" selected="selected">Document Type</option>
                                     <option value="Adhaar">Adhaar</option>
                                     <option value="DrivingLicence">Driving Licence</option>
@@ -86,19 +86,19 @@
                             </div>
                             <div class="col-2">
                                 <div class="input-group">
-                                    <input class="input--style-2" type="text" placeholder="Document Number" name="docno">
+                                    <input class="input--style-2" type="text" placeholder="Document Number" name="docno" required>
                                 </div>
                             </div>
                         </div>
                         <div class="row row-space">
                             <div class="col-2">
                                 <div class="input-group">
-                                    <input class="input--style-2" type="password" placeholder="Password" name="pass1">
+                                    <input class="input--style-2" type="password" placeholder="Password" name="pass1" required>
                                 </div>
                             </div>
                             <div class="col-2">
                                 <div class="input-group">
-                                    <input class="input--style-2" type="password" placeholder="Confirm Password" name="pass2">
+                                    <input class="input--style-2" type="password" placeholder="Confirm Password" name="pass2" required>
                                 </div>
                             </div>
                         </div>

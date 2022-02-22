@@ -1,5 +1,96 @@
 <!DOCTYPE html>
 <html lang="en">
+
+<head>
+    <!-- Required meta tags-->
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="Colorlib Templates">
+    <meta name="author" content="Colorlib">
+    <meta name="keywords" content="Colorlib Templates">
+
+    <!-- Title Page-->
+    <title>Booking</title>
+
+    <!-- Icons font CSS-->
+    <link href="vendor/mdi-font/css/material-design-iconic-font.min.css" rel="stylesheet" media="all">
+    <link href="vendor/font-awesome-4.7/css/font-awesome.min.css" rel="stylesheet" media="all">
+    <!-- Font special for pages-->
+    <link href="https://fonts.googleapis.com/css?family=Roboto:100,100i,300,300i,400,400i,500,500i,700,700i,900,900i" rel="stylesheet">
+
+    <!-- Vendor CSS-->
+    <link href="vendor/select2/select2.min.css" rel="stylesheet" media="all">
+    <link href="vendor/datepicker/daterangepicker.css" rel="stylesheet" media="all">
+
+    <!-- Main CSS-->
+    <link href="css/main.css" rel="stylesheet" media="all">
+</head>
+
+<body>
+    <div class="page-wrapper bg-red p-t-180 p-b-100 font-robo">
+        <div class="wrapper wrapper--w960">
+            <div class="card card-2">
+                <div class="card-heading"></div>
+                <div class="card-body">
+                    <h2 class="title">Booking</h2>
+                    <form method="POST">
+                        <div class="row row-space">
+                            <div class="col-2">
+                                <div class="input-group">
+                                    <div class="rs-select2 js-select-simple select--no-search">
+                                        <select name="source">
+                                            <option value="">Select</option>
+                                            <% result.forEach(i => { %>
+                                                <option value="<%= i.source %>"><%= i.source %></option>
+                                            <% }); %>
+                                        </select>
+                                        <div class="select-dropdown"></div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-2">
+                                <div class="input-group">
+                                    <div class="rs-select2 js-select-simple select--no-search">
+                                        <select name="destination">
+                                            <option value="">Select</option>
+                                            <% result.forEach(i => { %>
+                                                <option value="<%= i.destination %>"><%= i.destination %></option>
+                                            <% }); %>
+                                        </select>
+                                        <div class="select-dropdown"></div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                        </div>
+                    
+                        <div class="p-t-30">
+                            <button class="btn btn--radius btn--green" type="submit">Submit</button>
+                        </div>
+                    </form>
+        
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Jquery JS-->
+    <script src="vendor/jquery/jquery.min.js"></script>
+    <!-- Vendor JS-->
+    <script src="vendor/select2/select2.min.js"></script>
+    <script src="vendor/datepicker/moment.min.js"></script>
+    <script src="vendor/datepicker/daterangepicker.js"></script>
+
+    <!-- Main JS-->
+    <script src="js/global.js"></script>
+    
+
+</body><!-- This templates was made by Colorlib (https://colorlib.com) -->
+
+</html>
+
+<!-- <!DOCTYPE html>
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -23,95 +114,5 @@
         </select>
         <button type="submit">Search</button>
     </form>
-</body>
-</html>
-<!-- <!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>booking</title>
-</head>
-<body>
-    <h1>Booking</h1>
-    <form action="/booking" id="booking-form" method="post">
-        <input type="text" name="source" placeholder="Source" id="source-input">
-        <input type="text" name="destination" placeholder="Destination" id="destination-input">
-        <button type="submit">Search</button>
-    </form>
-    <table border="1" id="rides-table"></table>
-    <script>
-        const destination = document.getElementById('destination-input');
-        const form = document.getElementById('booking-form');
-        const source = document.getElementById('source-input');
-        const table = document.getElementById('rides-table');
-        table.style.display = 'none';
-        
-        form.onsubmit = async event => {
-            event.preventDefault();
-            const { rides } = await fetch('http://localhost:3001/booking', {
-                body: JSON.stringify({
-                    destination: destination.value,
-                    source: source.value
-                }),
-                headers: { 'Content-Type': 'application/json' },
-                method: 'POST'
-            }).then(response => response.json());
-
-            if (rides.length) {
-                table.innerHTML = `
-                    <tr>
-                        <th>Name</th>
-                        <th>Source</th>
-                        <th>Destination</th>
-                        <th>Date</th>
-                        <th>Time</th>
-                        <th>Fare</th>
-                        <th>Availability</th>
-                        <th>Phone</th>
-                        <th>Email</th>
-                        <th></th>
-                    </tr>
-                `;
-                table.style.display = 'table';
-                
-                rides.forEach(ride => {
-                    const tr = `
-                        <tr>
-                            <td>${ride.name}</td>
-                            <td>${ride.source}</td>
-                            <td>${ride.destination}</td>
-                            <td>${ride.date}</td>
-                            <td>${ride.time}</td>
-                            <td>${ride.fare}</td>
-                            <td>${ride.availability}</td>
-                            <td>${ride.phone}</td>
-                            <td>${ride.mailid}</td>
-                            <td>
-                                <button id="${ride._id}">Request</button>
-                            </td>
-                        </tr>
-                    `;
-                    table.innerHTML += tr;
-
-                    console.log(document.getElementById(ride._id));
-
-                    document.getElementById(ride._id).onclick = async () => {
-                        const { booking } = await fetch('http://localhost:3001/book', {
-                            body: JSON.stringify({ rideID: ride._id }),
-                            headers: { 'Content-Type': 'application/json' },
-                            method: 'POST'
-                        }).then(response => response.json());
-                        console.log(booking);
-                        alert('You have booked the ride!');
-                        location.href = '/rider';
-                    };
-                });
-            } else {
-                table.style.display = 'none';
-            }
-        };
-    </script>
 </body>
 </html> -->

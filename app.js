@@ -238,7 +238,7 @@ app.post("/signup", function (req, res) {
   });
 });
 
-app.post("/logout", auth, function (req, res) {
+app.get("/logout", auth, function (req, res) {
   req.session.destroy();
   res.redirect("/");
 });
@@ -248,6 +248,10 @@ app.get("/rider", auth, function (req, res) {
     userName: req.session.userName,
     mail: req.session.userEmail,
   });
+});
+
+app.get("PublishSuccess",function (req,res) {
+  res.redirect("/PublishSuccess");
 });
 
 app.post("/rider", function (req, res) {});
@@ -285,7 +289,7 @@ app.post("/publish", auth, function (req, res) {
       fare: Fare,
     });
     publishDetails1.save();
-    res.redirect("/rider");
+    res.render("PublishSuccess");
   });
 });
 
@@ -622,7 +626,7 @@ app.post("/complaintAction", function (req, res) {
 });
 
 app.post("/suspend", function (req, res) {
-  loginDetails.findOne({ email: req.body.rmail }, function (err, foundUser) {
+  loginDetails.findOne({ username: req.body.rmail }, function (err, foundUser) {
     if (err) {
       console.log(err);
     } else {

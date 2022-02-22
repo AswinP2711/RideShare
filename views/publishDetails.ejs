@@ -1,113 +1,122 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
+
 <head>
-	<title>Table V02</title>
-	<meta charset="UTF-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1">
-<!--===============================================================================================-->	
-	<link rel="icon" type="image/png" href="images/icons/favicon.ico"/>
-<!--===============================================================================================-->
-	<link rel="stylesheet" type="text/css" href="vendor/bootstrap/css/bootstrap.min.css">
-<!--===============================================================================================-->
-	<link rel="stylesheet" type="text/css" href="fonts/font-awesome-4.7.0/css/font-awesome.min.css">
-<!--===============================================================================================-->
-	<link rel="stylesheet" type="text/css" href="vendor/animate/animate.css">
-<!--===============================================================================================-->
-	<link rel="stylesheet" type="text/css" href="vendor/select2/select2.min.css">
-<!--===============================================================================================-->
-	<link rel="stylesheet" type="text/css" href="vendor/perfect-scrollbar/perfect-scrollbar.css">
-<!--===============================================================================================-->
-	<link rel="stylesheet" type="text/css" href="css/util.css">
-	<link rel="stylesheet" type="text/css" href="css/main.css">
-<!--===============================================================================================-->
+    <title>Rider Details</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <link href='https://fonts.googleapis.com/css?family=Roboto:400,100,300,700' rel='stylesheet' type='text/css'>
+
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+
+    <link rel="stylesheet" href="css/style.css">
+
+    <link rel="stylesheet" href="header/css/style.css">
+
 </head>
+
 <body>
-	
-	<div class="limiter">
-		<div class="container-table100">
-			<div class="wrap-table100">
-					<div class="table">
-						<div class="row header">
-							<div class="cell">
-								Name
-							</div>
-							<div class="cell" style="padding-left: 25px;">
-								Mail ID
-							</div>
-							<div class="cell" style="padding-left: 25px;">
-								Phone
-							</div>
-							<div class="cell" style="padding-left: 25px;">
-								Source
-							</div>
-                            <div class="cell" style="padding-left: 25px;">
-								Destination
-							</div>
-                            <div class="cell" style="padding-left: 25px;">
-								Date
-							</div>
-                            <div class="cell" style="padding-left: 25px;">
-								Time
-							</div>
-                            <div class="cell" style="padding-left: 25px;">
-								Availability
-							</div>
-                            <div class="cell" style="padding-left: 25px;">
-								Fare
-							</div>
-						</div>
+    <section class="ftco-section" style="padding-top: 0px; padding-bottom: 0px;">
 
-                        <% result.forEach(i => { %>
-                            <div class="row">
-                                <div class="cell" data-title="Full Name" style="padding-left: 25px;">
-                                    <%= i.name %>
-                                </div>
-                                <div class="cell" data-title="Age" style="padding-left: 25px;">
-                                    <%= i.mailid %>
-                                </div>
-                                <div class="cell" data-title="Job Title" style="padding-left: 25px;">
-                                    <%= i.phone %>
-                                </div>
-                                <div class="cell" data-title="Location" style="padding-left: 25px;">
-                                    <%= i.source %>
-                                </div>
-                                <div class="cell" data-title="Location" style="padding-left: 25px;">
-                                    <%= i.destination %>
-                                </div>
-                                <div class="cell" data-title="Location" style="padding-left: 25px;">
-                                    <%= i.date %>
-                                </div>
-                                <div class="cell" data-title="Location" style="padding-left: 25px;">
-                                    <%= i.time %>
-                                </div>
-                                <div class="cell" data-title="Location" style="padding-left: 25px;">
-                                    <%= i.availability %>
-                                </div>
-                                <div class="cell" data-title="Location" style="padding-left: 25px; padding-right: 25px;">
-                                    <%= i.fare %>
-                                </div>
+        <nav class="navbar navbar-expand-lg navbar-dark ftco_navbar bg-dark ftco-navbar-light" id="ftco-navbar">
+            <div class="container">
+
+
+                <div class="collapse navbar-collapse" id="ftco-nav">
+                    <ul class="navbar-nav mr-auto">
+                        <li class="nav-item active"><a href="#" class="nav-link">Home</a></li>
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" id="dropdown04" data-toggle="dropdown"
+                                aria-haspopup="true" aria-expanded="false">Page</a>
+                            <div class="dropdown-menu" aria-labelledby="dropdown04">
+                                <a class="dropdown-item" href="#">Page 1</a>
+                                <a class="dropdown-item" href="#">Page 2</a>
+                                <a class="dropdown-item" href="#">Page 3</a>
+                                <a class="dropdown-item" href="#">Page 4</a>
                             </div>
-                            <% }); %>
+                        </li>
+                        <li class="nav-item"><a href="#" class="nav-link">Catalog</a></li>
+                        <li class="nav-item"><a href="#" class="nav-link">Blog</a></li>
+                        <li class="nav-item"><a href="#" class="nav-link">Contact</a></li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
 
-					</div>
-			</div>
-		</div>
-	</div>
+    </section>
+    <section class="ftco-section" style="padding-top: 50px;">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-12">
+                    <h4 class="text-center mb-4">Publish Details</h4>
+                    <div class="table-wrap">
+                        <table class="table">
+                            <thead class="thead-primary">
+                                <tr>
+                                    <th>Name</th>
+                                    <th>Mail ID</th>
+                                    <th>Phone</th>
+                                    <th>Source</th>
+                                    <th>Destination</th>
+                                    <th>Date</th>
+                                    <th>Time</th>
+                                    <th>Availability</th>
+                                    <th>Fare</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <% result.forEach(i=> { %>
+                                    <tr>
+                                        <td>
+                                            <%= i.name %>
+                                        </td>
+                                        <td>
+                                            <%= i.mailid %>
+                                        </td>
+                                        <td>
+                                            <%= i.phone %>
+                                        </td>
+                                        <td>
+                                            <%= i.source %>
+                                        </td>
+                                        <td>
+                                            <%= i.destination %>
+                                        </td>
+                                        <td>
+                                            <%= i.date %>
+                                        </td>
+                                        <td>
+                                            <%= i.time %>
+                                        </td>
+                                        <td>
+                                            <%= i.availability %>
+                                        </td>
+                                        <td>
+                                            <%= i.fare %>
+                                        </td>
+                                    </tr>
+                                    <% }); %>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
 
+    <script src="js/jquery.min.js"></script>
+    <script src="js/popper.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+    <script src="js/main.js"></script>
 
-	
-
-<!--===============================================================================================-->	
-	<script src="vendor/jquery/jquery-3.2.1.min.js"></script>
-<!--===============================================================================================-->
-	<script src="vendor/bootstrap/js/popper.js"></script>
-	<script src="vendor/bootstrap/js/bootstrap.min.js"></script>
-<!--===============================================================================================-->
-	<script src="vendor/select2/select2.min.js"></script>
-<!--===============================================================================================-->
-	<script src="js/main.js"></script>
+    <script src="header/js/jquery.min.js"></script>
+    <script src="header/js/popper.js"></script>
+    <script src="header/js/bootstrap.min.js"></script>
+    <script src="header/js/main.js"></script>
 
 </body>
+
 </html>
 <!-- <!DOCTYPE html>
 <html lang="en">

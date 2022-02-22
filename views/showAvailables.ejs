@@ -1,4 +1,143 @@
-<!DOCTYPE html>
+<!doctype html>
+<html lang="en">
+
+<head>
+    <title>Availables</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <link href='https://fonts.googleapis.com/css?family=Roboto:400,100,300,700' rel='stylesheet' type='text/css'>
+
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+
+    <link rel="stylesheet" href="showAvailables/css/style.css">
+
+    <link rel="stylesheet" href="showAvailables/header/css/style.css">
+
+</head>
+
+<body>
+    <section class="ftco-section" style="padding-top: 0px; padding-bottom: 0px;">
+
+        <nav class="navbar navbar-expand-lg navbar-dark ftco_navbar bg-dark ftco-navbar-light" id="ftco-navbar">
+            <div class="container">
+
+
+                <div class="collapse navbar-collapse" id="ftco-nav">
+                    <ul class="navbar-nav mr-auto">
+                        <li class="nav-item active"><a href="#" class="nav-link">Home</a></li>
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" id="dropdown04" data-toggle="dropdown"
+                                aria-haspopup="true" aria-expanded="false">Page</a>
+                            <div class="dropdown-menu" aria-labelledby="dropdown04">
+                                <a class="dropdown-item" href="#">Page 1</a>
+                                <a class="dropdown-item" href="#">Page 2</a>
+                                <a class="dropdown-item" href="#">Page 3</a>
+                                <a class="dropdown-item" href="#">Page 4</a>
+                            </div>
+                        </li>
+                        <li class="nav-item"><a href="#" class="nav-link">Catalog</a></li>
+                        <li class="nav-item"><a href="#" class="nav-link">Blog</a></li>
+                        <li class="nav-item"><a href="#" class="nav-link">Contact</a></li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+
+    </section>
+    <section class="ftco-section" style="padding-top: 50px;">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-12">
+                    <h4 class="text-center mb-4">Availables</h4>
+                    <div class="table-wrap">
+                        <table class="table">
+                            <thead class="thead-primary">
+                                <tr>
+                                    <th>Name</th>
+                                    <th>Mail Id</th>
+                                    <th>Phone</th>
+                                    <th>Source</th>
+                                    <th>Destination</th>
+                                    <th>Date</th>
+                                    <th>Time</th>
+                                    <th>Fare</th>
+                                    <th>Availability</th>
+                                    <th>Select number of Seats</th>
+                                    <th>Request</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <% result.forEach(i=> { %>
+                                    <tr>
+                                        <td>
+                                            <%= i.name %>
+                                        </td>
+                                        <td>
+                                            <%= i.mailid %>
+                                        </td>
+                                        <td>
+                                            <%= i.phone %>
+                                        </td>
+                                        <td>
+                                            <%= i.source %>
+                                        </td>
+                                        <td>
+                                            <%= i.destination %>
+                                        </td>
+                                        <td>
+                                            <%= i.date %>
+                                        </td>
+                                        <td>
+                                            <%= i.time %>
+                                        </td>
+                                        <td>
+                                            <%= i.fare %>
+                                        </td>
+                                        <td>
+                                            <%= i.availability %>
+                                        </td>
+                                        <td>
+                                            <form action="/showAvailables" method="post">
+                                                <input type="text" name="SelectedSeats" required>
+                                        </td>
+                                        <td>
+                                            <input type="hidden" name="riname" value="<%= i.name %>">
+                                            <input type="hidden" name="rimail" value="<%= i.mailid %>">
+                                            <input type="hidden" name="risour" value="<%= i.source %>">
+                                            <input type="hidden" name="ridest" value="<%= i.destination %>">
+                                            <input type="hidden" name="ridate" value="<%= i.date %>">
+                                            <input type="hidden" name="ritime" value="<%= i.time %>">
+                                            <input type="hidden" name="rifare" value="<%= i.fare %>">
+                                            <input type="hidden" name="riavail" value="<%= i.availability %>">
+                                            <button type="submit">Request</button>
+                                            </form>
+                                        </td>
+                                    </tr>
+                                    <% }); %>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <script src="showAvailables/js/jquery.min.js"></script>
+    <script src="showAvailables/js/popper.js"></script>
+    <script src="showAvailables/js/bootstrap.min.js"></script>
+    <script src="showAvailables/js/main.js"></script>
+
+    <script src="showAvailables/header/js/jquery.min.js"></script>
+    <script src="showAvailables/header/js/popper.js"></script>
+    <script src="showAvailables/header/js/bootstrap.min.js"></script>
+    <script src="showAvailables/header/js/main.js"></script>
+
+</body>
+
+</html>
+
+<!-- <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -35,7 +174,7 @@
                 <td><%= i.availability %></td>
                 <td>
                     <form action="/showAvailables" method="post">
-                        <input type="text" name="SelectedSeats">
+                        <input type="text" name="SelectedSeats" required>
                 </td>
                 <td>
                         <input type="hidden" name="riname" value="<%= i.name %>">
@@ -53,4 +192,4 @@
         <% }); %>
       </table>
 </body>
-</html>
+</html> -->
