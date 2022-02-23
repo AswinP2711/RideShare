@@ -199,45 +199,60 @@ app.post("/signup", function (req, res) {
   var Password = req.body.pass1;
   var cPassword = req.body.pass2;
 
-  
+  var today = new Date();
+  var parts = DOB.split("/");
+  var thisYear = today.getFullYear();
+  // var thisMonth=today.getMonth();
+  // var thisDay=today.getDate();
 
-  signupDetails.findOne({ email: Email }, function (err, foundUser) {
-    if (!foundUser) {
-      if (Password != cPassword) {
-        console.log("Password does not match");
-        res.render("PassNotMatch.ejs");
-      } else {
-        const signupDetails1 = new signupDetails({
-          name: Name,
-          dob: DOB,
-          gender: Gender,
-          email: Email,
-          phone: Phone,
-          documenttype: Documenttype,
-          documentnumber: Documentnumber,
-          password: Password,
-        });
+  var givenYear = parts[2];
+  // var givenMonth=parts[1];
+  // var givenDay=parts[0];
 
-        signupDetails1.save(function (err, result) {
-          if (err) {
-            console.log(err);
+  if (thisYear < givenYear) {
+    res.render("invalidDOB");
+  } else {
+    var regx = /^[6-9]\d{9}$/;
+    if (regx.test(Phone))
+      signupDetails.findOne({ email: Email }, function (err, foundUser) {
+        if (!foundUser) {
+          if (Password != cPassword) {
+            console.log("Password does not match");
+            res.render("PassNotMatch.ejs");
           } else {
-            res.redirect("/");
+            const signupDetails1 = new signupDetails({
+              name: Name,
+              dob: DOB,
+              gender: Gender,
+              email: Email,
+              phone: Phone,
+              documenttype: Documenttype,
+              documentnumber: Documentnumber,
+              password: Password,
+            });
+
+            signupDetails1.save(function (err, result) {
+              if (err) {
+                console.log(err);
+              } else {
+                res.redirect("/");
+              }
+            });
+
+            const loginDetails1 = new loginDetails({
+              username: Email,
+              password: Password,
+            });
+
+            loginDetails1.save();
           }
-        });
-
-        const loginDetails1 = new loginDetails({
-          username: Email,
-          password: Password,
-        });
-
-        loginDetails1.save();
-      }
-    } else {
-      console.log("Email Id already Exists!!!");
-      res.render("EmailIdAlreadyExists");
-    }
-  });
+        } else {
+          console.log("Email Id already Exists!!!");
+          res.render("EmailIdAlreadyExists");
+        }
+      });
+    else res.render("invalidPhone");
+  }
 });
 
 app.get("/logout", auth, function (req, res) {
@@ -252,7 +267,7 @@ app.get("/rider", auth, function (req, res) {
   });
 });
 
-app.get("PublishSuccess",function (req,res) {
+app.get("PublishSuccess", function (req, res) {
   res.redirect("/PublishSuccess");
 });
 
@@ -265,34 +280,47 @@ app.get("/publish", function (req, res) {
 app.post("/publish", auth, function (req, res) {
   var Source = req.body.source;
   var Destination = req.body.destination;
-  var Date = req.body.date;
+  var Date1 = req.body.date;
   var Time = req.body.time;
   var Availability = req.body.availability;
   var Fare = req.body.fare;
 
   var userName = req.session.userEmail;
 
-  signupDetails.findOne({ email: userName }, function (err, foundUser) {
-    if (err) {
-      console.log(err);
-    } else {
-      var Name = foundUser.name;
-      var Phone = foundUser.phone;
-    }
-    const publishDetails1 = new publishDetails({
-      name: Name,
-      mailid: userName,
-      phone: Phone,
-      source: Source,
-      destination: Destination,
-      date: Date,
-      time: Time,
-      availability: Availability,
-      fare: Fare,
+  var today = new Date();
+  var parts = Date1.split("/");
+
+  var givenYear = parts[2];
+  var givenMonth = parts[1];
+  var givenDay = parts[0];
+
+  var Date2 = new Date(givenYear + "-" + givenMonth + "-" + givenDay);
+
+  if (today > Date2) {
+    res.render("DateNotValid");
+  } else {
+    signupDetails.findOne({ email: userName }, function (err, foundUser) {
+      if (err) {
+        console.log(err);
+      } else {
+        var Name = foundUser.name;
+        var Phone = foundUser.phone;
+      }
+      const publishDetails1 = new publishDetails({
+        name: Name,
+        mailid: userName,
+        phone: Phone,
+        source: Source,
+        destination: Destination,
+        date: Date1,
+        time: Time,
+        availability: Availability,
+        fare: Fare,
+      });
+      publishDetails1.save();
+      res.render("PublishSuccess");
     });
-    publishDetails1.save();
-    res.render("PublishSuccess");
-  });
+  }
 });
 
 app.get("/admin", function (req, res) {
@@ -314,7 +342,6 @@ app.get("/riderDetails", function (req, res) {
     if (err) {
       console.log(err);
     } else {
-      console.log(results);
       res.render("riderDetails", { result: results });
     }
   });
@@ -462,7 +489,6 @@ app.get("/Acceptedmyrequests", function (req, res) {
       if (err) {
         console.log(err);
       } else {
-        console.log(results);
         res.render("Acceptedmyrequests", { result: results });
       }
     }
@@ -485,7 +511,6 @@ app.post("/Acceptedmyrequests", function (req, res) {
       } else {
         let avail =
           parseInt(findUser.availability) + parseInt(req.body.selected);
-        console.log(avail);
         publishDetails.findOneAndUpdate(
           {
             mailid: req.body.publishermailid,
