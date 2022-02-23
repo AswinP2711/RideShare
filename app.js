@@ -199,6 +199,8 @@ app.post("/signup", function (req, res) {
   var Password = req.body.pass1;
   var cPassword = req.body.pass2;
 
+  
+
   signupDetails.findOne({ email: Email }, function (err, foundUser) {
     if (!foundUser) {
       if (Password != cPassword) {
@@ -302,7 +304,6 @@ app.get("/publishDetails", function (req, res) {
     if (err) {
       console.log(err);
     } else {
-      console.log(results);
       res.render("publishDetails", { result: results });
     }
   });
